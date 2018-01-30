@@ -5,7 +5,7 @@ const app = express();
 const path = require('path');
 const db = require("./models");
 const bodyParser = require("body-parser");
-const Router = require('../client/router.js');
+const Router = require('./router.js');
 
 app.use(morgan('dev'));
 app.use(bodyParser.json());
