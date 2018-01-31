@@ -60,93 +60,11 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const mapboxgl = __webpack_require__(1);
-const buildMarker = __webpack_require__(3);
-
-mapboxgl.accessToken = "pk.eyJ1Ijoic253b290ZW4iLCJhIjoiY2pkMXVvY2d6MWhqMjMzbzQwZWNqbWJyNiJ9.kUYt_xOxJSW-n4ZxjFckmA";
-
-const fullstackCoords = [-74.009, 40.705]
-
-fetch('/api/attractions')
-.then(result => result.json())
-.then(data => {
-  const elementIds = ["hotels-choices", "activities-choices", "restaurants-choices"]
-  for(let i=0; i<data.length; i++){
-    for(let x=0; x<data[i].length; x++){
-      let option = document.createElement("option");
-      option.text = data[i][x].name;
-      let select = document.getElementById(elementIds[i]);
-      select.appendChild(option);
-    }
-  }
-})
-.catch((err) => console.log(err));
-
-const array = ["hotels","activities", "restaurants"]
-
-array.forEach(function(attractionType){
-
-  document.getElementById(`${attractionType}-add`).addEventListener("click", function(){
-    element = document.createElement("li")
-    currentchoice = document.getElementById(`${attractionType}-choices`).value
-    element.innerHTML = currentchoice
-
-    document.getElementById(`${attractionType}-list`).appendChild(element)
-
-    fetch("/api/attractions")
-      .then(result=>result.json())
-      .then(data=>{
-        let index = array.indexOf(`${attractionType}`);
-
-        for(let i =0; i< data[index].length; i++){
-
-          if(data[index][i].name === currentchoice){
-            const coords = data[index][i].place.location;
-            const marker = buildMarker(`${attractionType}`, coords)
-            marker.addTo(map)
-            addButton(element, marker);
-            map.flyTo({center: coords, zoom: 16});
-          }
-        }
-      })
-  })
-
-});
-
-function addButton(element, marker){
-  const button = document.createElement("button");
-  button.innerHTML = 'x';
-  button.attribute = ("class", "cancel");
-  button.onclick = function(){
-    element.remove();
-    marker.remove();
-    map.flyTo({center: fullstackCoords, zoom: 12})
-
-  }
-  element.appendChild(button);
-}
-
-
-const map = new mapboxgl.Map({
-  container: "map",
-  center: fullstackCoords, // FullStack coordinates
-  zoom: 12, // starting zoom
-  style: "mapbox://styles/mapbox/streets-v10" // mapbox has lots of different map styles available.
-});
-
-const marker = buildMarker("activities", fullstackCoords);
-marker.addTo(map);
-
-
-/***/ }),
-/* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {var require;var require;(function(f){if(true){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.mapboxgl = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return require(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(_dereq_,module,exports){
@@ -613,6 +531,105 @@ module.exports={"$version":8,"$root":{"version":{"required":true,"type":"enum","
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)))
 
 /***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const mapboxgl = __webpack_require__(0);
+const buildMarker = __webpack_require__(3);
+
+mapboxgl.accessToken = "pk.eyJ1Ijoic253b290ZW4iLCJhIjoiY2pkMXVvY2d6MWhqMjMzbzQwZWNqbWJyNiJ9.kUYt_xOxJSW-n4ZxjFckmA";
+
+const pragueCoords = [14.4378, 50.0755]
+
+const selectedAttractions = [];
+
+function addToState (name, type){
+  if(selectedAttractions.indexOf(name) === -1){
+    selectedAttractions.push(name);
+    return true;
+  }
+  else false;
+}
+
+fetch('/api/attractions')
+.then(result => result.json())
+.then(data => {
+  const elementIds = ["hotels-choices", "activities-choices", "restaurants-choices"]
+  for(let i=0; i<data.length; i++){
+    for(let x=0; x<data[i].length; x++){
+      let option = document.createElement("option");
+      option.text = data[i][x].name;
+      let select = document.getElementById(elementIds[i]);
+      select.appendChild(option);
+    }
+  }
+})
+.catch((err) => console.log(err));
+
+const array = ["hotels","activities", "restaurants"]
+
+array.forEach(function(attractionType){
+
+    document.getElementById(`${attractionType}-add`).addEventListener("click", function(){
+      name = document.getElementById(`${attractionType}-choices`).value
+
+      if(addToState(name)){
+        element = document.createElement("li")
+        element.innerHTML = name
+
+        document.getElementById(`${attractionType}-list`).appendChild(element)
+
+        fetcher(attractionType, name);
+      }
+  })
+
+});
+
+function fetcher(attractionType, name){
+  fetch("/api/attractions")
+  .then(result=>result.json())
+  .then(data=>{
+    let index = array.indexOf(`${attractionType}`);
+    for(let i =0; i< data[index].length; i++){
+      if(data[index][i].name === name){
+        const coords = data[index][i].place.location;
+        const marker = buildMarker(`${attractionType}`, coords)
+        marker.addTo(map)
+        addButton(element, marker);
+        map.flyTo({center: coords, zoom: 16});
+      }
+    }
+  })
+}
+
+function addButton(element, marker){
+  const button = document.createElement("button");
+  button.innerHTML = 'x';
+  button.attribute = ("class", "cancel");
+  button.onclick = function(){
+    element.remove();
+    marker.remove();
+    const index = selectedAttractions.indexOf(element.innerHTML.slice(0, -18))
+    selectedAttractions[index] = null;
+    map.flyTo({center: pragueCoords, zoom: 12})
+
+  }
+  element.appendChild(button);
+}
+
+
+const map = new mapboxgl.Map({
+  container: "map",
+  center: pragueCoords, // FullStack coordinates
+  zoom: 12, // starting zoom
+  style: "mapbox://styles/mapbox/streets-v10" // mapbox has lots of different map styles available.
+});
+
+const marker = buildMarker("activities", pragueCoords);
+marker.addTo(map);
+
+
+/***/ }),
 /* 2 */
 /***/ (function(module, exports) {
 
@@ -643,7 +660,7 @@ module.exports = g;
 /* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const { Marker } = __webpack_require__(1);
+const { Marker } = __webpack_require__(0);
 
 const iconURLs = {
   hotels: "http://i.imgur.com/D9574Cu.png",

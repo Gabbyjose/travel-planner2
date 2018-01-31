@@ -3,7 +3,17 @@ const buildMarker = require("./marker.js");
 
 mapboxgl.accessToken = "pk.eyJ1Ijoic253b290ZW4iLCJhIjoiY2pkMXVvY2d6MWhqMjMzbzQwZWNqbWJyNiJ9.kUYt_xOxJSW-n4ZxjFckmA";
 
-const fullstackCoords = [-74.009, 40.705]
+const pragueCoords = [14.4378, 50.0755]
+
+const selectedAttractions = [];
+
+function addToState (name, type){
+  if(selectedAttractions.indexOf(name) === -1){
+    selectedAttractions.push(name);
+    return true;
+  }
+  else false;
+}
 
 fetch('/api/attractions')
 .then(result => result.json())
@@ -24,32 +34,37 @@ const array = ["hotels","activities", "restaurants"]
 
 array.forEach(function(attractionType){
 
-  document.getElementById(`${attractionType}-add`).addEventListener("click", function(){
-    element = document.createElement("li")
-    currentchoice = document.getElementById(`${attractionType}-choices`).value
-    element.innerHTML = currentchoice
+    document.getElementById(`${attractionType}-add`).addEventListener("click", function(){
+      name = document.getElementById(`${attractionType}-choices`).value
 
-    document.getElementById(`${attractionType}-list`).appendChild(element)
+      if(addToState(name)){
+        element = document.createElement("li")
+        element.innerHTML = name
 
-    fetch("/api/attractions")
-      .then(result=>result.json())
-      .then(data=>{
-        let index = array.indexOf(`${attractionType}`);
+        document.getElementById(`${attractionType}-list`).appendChild(element)
 
-        for(let i =0; i< data[index].length; i++){
-
-          if(data[index][i].name === currentchoice){
-            const coords = data[index][i].place.location;
-            const marker = buildMarker(`${attractionType}`, coords)
-            marker.addTo(map)
-            addButton(element, marker);
-            map.flyTo({center: coords, zoom: 16});
-          }
-        }
-      })
+        fetcher(attractionType, name);
+      }
   })
 
 });
+
+function fetcher(attractionType, name){
+  fetch("/api/attractions")
+  .then(result=>result.json())
+  .then(data=>{
+    let index = array.indexOf(`${attractionType}`);
+    for(let i =0; i< data[index].length; i++){
+      if(data[index][i].name === name){
+        const coords = data[index][i].place.location;
+        const marker = buildMarker(`${attractionType}`, coords)
+        marker.addTo(map)
+        addButton(element, marker);
+        map.flyTo({center: coords, zoom: 16});
+      }
+    }
+  })
+}
 
 function addButton(element, marker){
   const button = document.createElement("button");
@@ -58,7 +73,9 @@ function addButton(element, marker){
   button.onclick = function(){
     element.remove();
     marker.remove();
-    map.flyTo({center: fullstackCoords, zoom: 12})
+    const index = selectedAttractions.indexOf(element.innerHTML.slice(0, -18))
+    selectedAttractions[index] = null;
+    map.flyTo({center: pragueCoords, zoom: 12})
 
   }
   element.appendChild(button);
@@ -67,10 +84,10 @@ function addButton(element, marker){
 
 const map = new mapboxgl.Map({
   container: "map",
-  center: fullstackCoords, // FullStack coordinates
+  center: pragueCoords, // FullStack coordinates
   zoom: 12, // starting zoom
   style: "mapbox://styles/mapbox/streets-v10" // mapbox has lots of different map styles available.
 });
 
-const marker = buildMarker("activities", fullstackCoords);
+const marker = buildMarker("activities", pragueCoords);
 marker.addTo(map);
