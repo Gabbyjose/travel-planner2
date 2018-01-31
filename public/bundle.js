@@ -557,15 +557,65 @@ fetch('/api/attractions')
 .catch((err) => console.log(err));
 
 document.getElementById("activities-add").addEventListener("click", function() {
-  console.log('does this even click tho');
+
+  element = document.createElement("li")
+  currentchoice = document.getElementById("activities-choices").value
+  element.innerHTML = currentchoice
+
+  document.getElementById("activities-list").appendChild(element)
+
+  fetch("/api/attractions")
+    .then(result=>result.json())
+    .then(data=>{
+      for(let i =0; i< data[1].length; i++){
+        if(data[1][i].name === currentchoice){
+
+          buildMarker('activities',data[1][i].place.location).addTo(map)
+        }
+      }
+    })
+
+
 })
 
 document.getElementById("restaurants-add").addEventListener("click", function() {
-  console.log('does this even click tho');
+  element = document.createElement("li")
+  currentchoice = document.getElementById("restaurants-choices").value
+  element.innerHTML = currentchoice
+  document.getElementById("restaurants-list").appendChild(element)
+
+  fetch("/api/attractions")
+    .then(result=>result.json())
+    .then(data=>{
+      for(let i =0; i< data[2].length; i++){
+        if(data[2][i].name === currentchoice){
+          console.log(data[2][i])
+          buildMarker('restaurants',data[2][i].place.location).addTo(map)
+        }
+      }
+    })
+
 })
 
 document.getElementById("hotels-add").addEventListener("click", function() {
-  console.log('does this even click tho');
+  element = document.createElement("li")
+  currentchoice = document.getElementById("hotels-choices").value
+  element.innerHTML = currentchoice
+
+  fetch("/api/attractions")
+    .then(result=>result.json())
+    .then(data=>{
+      for(let i =0; i< data[0].length; i++){
+        if(data[0][i].name === currentchoice){
+
+          buildMarker('hotels',data[0][i].place.location).addTo(map)
+        }
+      }
+    })
+
+
+  document.getElementById("hotels-list").appendChild(element)
+
 })
 
 const map = new mapboxgl.Map({

@@ -48,7 +48,7 @@ var data = {
     {
       name: "Boutique Hotel Constans",
       place: {
-        address: "Bretislavova 309/14 | Mala Strana",
+        address: "Bretislavova 309/14",
         city: "Prague",
         state: "Bohemia",
         phone: "123-456-7890",
@@ -72,7 +72,7 @@ var data = {
     {
       name: "Grand Hotel Bohemia",
       place: {
-        address: "Kralodvorska 4 | Stare Mesto",
+        address: "Kralodvorska 4",
         city: "Prague",
         state: "Bohemia",
         phone: "123-456-7890",
@@ -84,7 +84,7 @@ var data = {
     {
       name: "Bishop's House",
       place: {
-        address: "Dražického nám. 62/6, 118 00 Malá Strana",
+        address: "Dražického nám. 62/6",
         city: "Prague",
         state: "Bohemia",
         phone: "123-456-7890",
@@ -96,7 +96,7 @@ var data = {
     {
       name: "Golden Well Hotel",
       place: {
-        address: "U Zlaté studně 166/4, 118 01 Malá Strana",
+        address: "U Zlaté studně 166/4",
         city: "Prague",
         state: "Bohemia",
         phone: "123-456-7890",
@@ -108,7 +108,7 @@ var data = {
     {
       name: "Mosiac House",
       place: {
-        address: "Odborů 278/4, 120 00 Nové Město",
+        address: "Odborů 278/4, 120 00",
         city: "Prague",
         state: "Bohemia",
         phone: "123-456-7890",
@@ -132,7 +132,7 @@ var data = {
     {
       name: "Radisson Blu Alcron Hotel, Prague",
       place: {
-        address: "Štěpánská 623/40, 110 00 Nové Město",
+        address: "Štěpánská 623/40",
         city: "Prague",
         state: "Bohemia",
         phone: "123-456-7890",
@@ -144,7 +144,7 @@ var data = {
     {
       name: "Alchymist Nosticova Palace",
       place: {
-        address: "Nosticova 463/1, 118 00 Malá Strana",
+        address: "Nosticova 463/1",
         city: "Prague",
         state: "Bohemia",
         phone: "123-456-7890",
@@ -154,21 +154,9 @@ var data = {
       amenities: "Pool, 24 hour Gym, Paid Wi-Fi"
     },
     {
-      name: "Prague Marriott Downtown",
-      place: {
-        address: "85 W St at AlbaBohemia St",
-        city: "Prague",
-        state: "Bohemia",
-        phone: "123-456-7890",
-        location: [-73.989568, 40.731131]
-      },
-      num_stars: 3.5,
-      amenities: "24 hour Gym, Paid Wi-Fi"
-    },
-    {
       name: "Hotel Caesar Prague",
       place: {
-        address: "Myslíkova 1959/15, 110 00 Nové Město",
+        address: "Myslíkova 1959/15",
         city: "Prague",
         state: "Bohemia",
         phone: "123-456-7890",
@@ -180,7 +168,7 @@ var data = {
     {
       name: "Hostel Mojo",
       place: {
-        address: "140 Washington St",
+        address: "Řeznická 662/17",
         city: "Prague",
         state: "Bohemia",
         phone: "123-456-7890",
@@ -206,7 +194,7 @@ var data = {
     {
       name: "La Degustation Bohême Bourgeoise",
       place: {
-        address: "Haštalská 18, 110 00 Staré Město",
+        address: "Haštalská 18",
         city: "Prague",
         state: "Bohemia",
         phone: "123-456-7890",
